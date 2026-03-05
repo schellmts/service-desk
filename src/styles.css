@@ -126,6 +126,239 @@
   border-color: var(--app-border);
 }
 
+/* Alertas e badges no dark mode */
+[data-theme="dark"] .alert {
+  background-color: var(--app-surface-elevated);
+  border-color: var(--app-border);
+  color: var(--app-text);
+}
+
+[data-theme="dark"] .alert-info {
+  background-color: rgba(13, 202, 240, 0.15);
+  border-color: rgba(13, 202, 240, 0.3);
+  color: #0dcaf0;
+}
+
+[data-theme="dark"] .alert-warning {
+  background-color: rgba(255, 193, 7, 0.15);
+  border-color: rgba(255, 193, 7, 0.3);
+  color: #ffc107;
+}
+
+[data-theme="dark"] .alert-success {
+  background-color: rgba(25, 135, 84, 0.15);
+  border-color: rgba(25, 135, 84, 0.3);
+  color: #198754;
+}
+
+[data-theme="dark"] .alert-danger {
+  background-color: rgba(220, 53, 69, 0.15);
+  border-color: rgba(220, 53, 69, 0.3);
+  color: #dc3545;
+}
+
+[data-theme="dark"] .badge {
+  color: var(--app-text);
+}
+
+[data-theme="dark"] .badge.bg-secondary {
+  background-color: var(--app-text-muted) !important;
+}
+
+[data-theme="dark"] .badge.bg-primary {
+  background-color: var(--app-focus) !important;
+}
+
+/* Cards e superfícies */
+[data-theme="dark"] .card-header {
+  background-color: var(--app-surface-elevated) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text);
+}
+
+[data-theme="dark"] .card-header.bg-white {
+  background-color: var(--app-surface-elevated) !important;
+}
+
+[data-theme="dark"] .card-header.bg-primary {
+  background-color: var(--app-focus) !important;
+  color: #fff;
+}
+
+[data-theme="dark"] .bg-light {
+  background-color: var(--app-surface-elevated) !important;
+}
+
+[data-theme="dark"] .bg-white {
+  background-color: var(--app-surface) !important;
+}
+
+/* List groups */
+[data-theme="dark"] .list-group-item {
+  background-color: var(--app-surface-elevated);
+  border-color: var(--app-border);
+  color: var(--app-text);
+}
+
+[data-theme="dark"] .list-group-item:hover {
+  background-color: rgba(var(--app-focus-rgb), 0.1);
+}
+
+/* Links */
+[data-theme="dark"] a {
+  color: var(--app-text);
+}
+
+[data-theme="dark"] a.text-muted {
+  color: var(--app-text-muted) !important;
+}
+
+[data-theme="dark"] a:hover {
+  color: var(--app-focus);
+}
+
+/* Botões outline e secundários */
+[data-theme="dark"] .btn-outline-secondary {
+  color: var(--app-text);
+  border-color: var(--app-border);
+}
+
+[data-theme="dark"] .btn-outline-secondary:hover {
+  background-color: var(--app-surface-elevated);
+  border-color: var(--app-border);
+  color: var(--app-text);
+}
+
+[data-theme="dark"] .btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+[data-theme="dark"] .btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/* Inputs e selects */
+[data-theme="dark"] .form-control::placeholder,
+[data-theme="dark"] .form-select option {
+  color: var(--app-text-muted);
+}
+
+/* Shadows no dark mode */
+[data-theme="dark"] .shadow,
+[data-theme="dark"] .shadow-sm {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .shadow-sm {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Modais e overlays */
+[data-theme="dark"] .modal-content {
+  background-color: var(--app-surface-elevated);
+  border-color: var(--app-border);
+  color: var(--app-text);
+}
+
+[data-theme="dark"] .modal-header {
+  border-color: var(--app-border);
+}
+
+[data-theme="dark"] .modal-footer {
+  border-color: var(--app-border);
+}
+
+/* Navbar mobile */
+[data-theme="dark"] .navbar-light {
+  background-color: var(--app-header-bg) !important;
+  border-color: var(--app-border) !important;
+}
+
+/* Form check */
+[data-theme="dark"] .form-check-input {
+  background-color: var(--app-input-bg);
+  border-color: var(--app-border);
+}
+
+[data-theme="dark"] .form-check-input:checked {
+  background-color: var(--app-focus);
+  border-color: var(--app-focus);
+}
+
+[data-theme="dark"] .form-check-label {
+  color: var(--app-text);
+}
+
+/* Input groups */
+[data-theme="dark"] .input-group-text {
+  background-color: var(--app-surface-elevated);
+  border-color: var(--app-border);
+  color: var(--app-text);
+}
+
+/* Text colors específicos */
+[data-theme="dark"] .text-primary {
+  color: var(--app-focus) !important;
+}
+
+[data-theme="dark"] .text-danger {
+  color: #dc3545 !important;
+}
+
+[data-theme="dark"] .text-success {
+  color: #198754 !important;
+}
+
+[data-theme="dark"] .text-info {
+  color: #0dcaf0 !important;
+}
+
+[data-theme="dark"] .text-warning {
+  color: #ffc107 !important;
+}
+
+/* Background colors específicos */
+[data-theme="dark"] .bg-danger {
+  background-color: #dc3545 !important;
+}
+
+[data-theme="dark"] .bg-success {
+  background-color: #198754 !important;
+}
+
+[data-theme="dark"] .bg-info {
+  background-color: #0dcaf0 !important;
+}
+
+[data-theme="dark"] .bg-warning {
+  background-color: #ffc107 !important;
+}
+
+/* Cards com cores específicas - manter cores primárias */
+[data-theme="dark"] .card[style*="background-color: #06002E"] {
+  background-color: #06002E !important;
+}
+
+/* Elementos com bg-white inline - substituir no dark mode */
+[data-theme="dark"] [style*="background-color: white"],
+[data-theme="dark"] [style*="background-color: #ffffff"],
+[data-theme="dark"] [style*="background-color:#ffffff"] {
+  background-color: var(--app-surface-elevated) !important;
+}
+
+/* Barra de ações e elementos específicos */
+[data-theme="dark"] .barra-acoes {
+  background-color: var(--app-surface-elevated) !important;
+  border-color: var(--app-border) !important;
+}
+
+[data-theme="dark"] .anexo-item {
+  background-color: var(--app-surface-elevated) !important;
+  border-color: var(--app-border) !important;
+}
+
 /* Área de conteúdo das páginas */
 .app-page-content {
   background-color: var(--app-bg);

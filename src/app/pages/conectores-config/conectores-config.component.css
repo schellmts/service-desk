@@ -1,0 +1,39 @@
+.cursor-pointer {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cursor-pointer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .cursor-pointer:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.text-purple {
+  color: #6f42c1;
+}
+
+.form-check-input:checked {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.badge .btn-close {
+  margin-left: 0.25rem;
+}
+
+.sticky-top {
+  z-index: 1020;
+}
+
+/* Dark mode específico para conectores */
+[data-theme="dark"] .card.border {
+  border-color: var(--app-border) !important;
+}
+
+[data-theme="dark"] .card.bg-light {
+  background-color: var(--app-surface-elevated) !important;
+}

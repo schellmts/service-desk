@@ -8,6 +8,7 @@ import { TicketAIService, AssistenteResponse } from '../../services/ticket-ai.se
 import { TicketService } from '../../services/ticket';
 import { AuthService } from '../../services/auth.service';
 import { SpeechRecognitionService } from '../../services/speech-recognition.service';
+import { WakeWordService } from '../../services/wake-word.service';
 import { AiConfigService } from '../../services/ai-config.service';
 import Swal from 'sweetalert2';
 
@@ -37,17 +38,20 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
   private authService = inject(AuthService);
   private router = inject(Router);
   private speechService = inject(SpeechRecognitionService);
+  private wakeWordService = inject(WakeWordService);
   private aiConfigService = inject(AiConfigService);
   private destroy$ = new Subject<void>();
 
   @ViewChild('chatContainer') chatContainer!: ElementRef;
   @ViewChild('messageInput') messageInput!: ElementRef;
+  @ViewChild('chatWindow') chatWindow!: ElementRef;
 
   private readonly SILENCE_TIMEOUT_MS = 2500;
   private parouManualmente = false;
   private silenceTimerId: ReturnType<typeof setTimeout> | null = null;
 
   chatOpen = signal(false);
+  chatClosing = signal(false);
   messages = signal<ChatMessage[]>([]);
   currentMessage = signal('');
   loading = signal(false);
@@ -79,9 +83,57 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
       });
     }
 
+    // Configurar wake word detection (sempre escuta, mas só abre se estiver habilitado)
+    if (this.wakeWordService.isSupported) {
+      this.wakeWordService.wakeWordDetected$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+        // Abre o chat quando detecta a wake word (apenas se estiver habilitado)
+        if (this.wakeWordService.isEnabled && !this.chatOpen()) {
+          this.toggleChat();
+        }
+        // Foca no input após um pequeno delay
+        setTimeout(() => {
+          if (this.messageInput?.nativeElement) {
+            this.messageInput.nativeElement.focus();
+          }
+        }, 300);
+      });
+    }
+
+    // Listener para fechar o chat ao clicar fora
+    // Usa setTimeout para garantir que o listener seja adicionado após o Angular processar o DOM
+    setTimeout(() => {
+      document.addEventListener('click', this.handleClickOutside);
+    }, 0);
+
     if (this.chatOpen()) {
       this.addSystemMessage('Olá! Sou o Axis AI, seu assistente virtual para abertura de chamados. Descreva seu problema e eu criarei um ticket automaticamente para você.');
     }
+  }
+
+  private handleClickOutside = (event: MouseEvent): void => {
+    // Só fecha se o chat estiver aberto e não estiver fechando
+    if (!this.chatOpen() || this.chatClosing()) {
+      return;
+    }
+
+    // Verifica se o clique foi no botão do chat (não deve fechar)
+    const target = event.target as HTMLElement;
+    const chatButton = document.querySelector('.floating-chat-button');
+    
+    if (chatButton && (chatButton.contains(target) || chatButton === target)) {
+      return;
+    }
+
+    // Verifica se o clique foi dentro do chat window
+    if (this.chatWindow?.nativeElement) {
+      const chatWindowElement = this.chatWindow.nativeElement;
+      if (chatWindowElement.contains(target)) {
+        return;
+      }
+    }
+
+    // Se chegou aqui, o clique foi fora do chat - fecha o chat
+    this.toggleChat();
   }
 
   ngAfterViewChecked(): void {
@@ -93,20 +145,34 @@ export class FloatingChatComponent implements OnInit, OnDestroy, AfterViewChecke
 
   ngOnDestroy(): void {
     this.cancelarEnvioAutomatico();
+    // Remove o listener de click fora
+    document.removeEventListener('click', this.handleClickOutside);
+    // Não desabilita o wake word aqui - ele deve permanecer ativo conforme a configuração do usuário
+    // O wake word é gerenciado pela configuração salva no localStorage
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   toggleChat(): void {
-    this.chatOpen.set(!this.chatOpen());
-    if (this.chatOpen() && this.messages().length === 0) {
-      this.addSystemMessage('Olá! Sou o Axis AI, seu assistente virtual para abertura de chamados. Descreva seu problema e eu criarei um ticket automaticamente para você.');
-    }
-    setTimeout(() => {
-      if (this.messageInput) {
-        this.messageInput.nativeElement.focus();
+    if (this.chatOpen()) {
+      // Fechando o chat - inicia animação de saída
+      this.chatClosing.set(true);
+      setTimeout(() => {
+        this.chatOpen.set(false);
+        this.chatClosing.set(false);
+      }, 300); // Tempo da animação de saída
+    } else {
+      // Abrindo o chat
+      this.chatOpen.set(true);
+      if (this.messages().length === 0) {
+        this.addSystemMessage('Olá! Sou o Axis AI, seu assistente virtual para abertura de chamados. Descreva seu problema e eu criarei um ticket automaticamente para você.');
       }
-    }, 100);
+      setTimeout(() => {
+        if (this.messageInput) {
+          this.messageInput.nativeElement.focus();
+        }
+      }, 100);
+    }
   }
 
   private agendarEnvioAutomatico(): void {

@@ -38,13 +38,25 @@
   border-radius: 10px;
 }
 
+[data-theme="dark"] .card-body::-webkit-scrollbar-track {
+  background: var(--app-surface);
+}
+
 .card-body::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 10px;
 }
 
+[data-theme="dark"] .card-body::-webkit-scrollbar-thumb {
+  background: var(--app-text-muted);
+}
+
 .card-body::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+[data-theme="dark"] .card-body::-webkit-scrollbar-thumb:hover {
+  background: var(--app-text);
 }
 
 /* Input focus */

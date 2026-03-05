@@ -9,6 +9,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { TicketChatComponent } from './pages/ticket-chat/ticket-chat.component';
 import { PainelAdminComponent } from './pages/painel-admin/painel-admin.component';
 import { IntegracaoComponent } from './pages/integracao/integracao.component';
+import { ConectoresConfigComponent } from './pages/conectores-config/conectores-config.component';
+import { VoiceConfigComponent } from './pages/voice-config/voice-config.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -22,6 +24,8 @@ export const routes: Routes = [
   { path: 'kanban', component: KanbanBoardComponent, canActivate: [authGuard] },
   { path: 'config-ia', component: AiConfigComponent, canActivate: [authGuard] },
   { path: 'integracao', component: IntegracaoComponent, canActivate: [authGuard] },
+  { path: 'integracao/conectores', component: ConectoresConfigComponent, canActivate: [authGuard] },
+  { path: 'config-voz', component: VoiceConfigComponent, canActivate: [authGuard] },
   { path: 'text-reviewer', redirectTo: 'config-ia', pathMatch: 'full' },
   { path: 'chat', component: TicketChatComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/dashboard' }

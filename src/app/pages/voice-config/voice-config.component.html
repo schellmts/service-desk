@@ -1,0 +1,191 @@
+<app-layout>
+  <div class="px-2 px-md-4 py-3 py-md-4 app-page-content">
+    <header class="mb-4">
+      <nav class="mb-2">
+        <a routerLink="/painel-admin" class="text-decoration-none text-muted small">
+          <i class="bi bi-arrow-left me-1"></i> Voltar ao painel admin
+        </a>
+      </nav>
+      <h3 class="fw-semibold mb-1" style="font-size: 1.5rem;">Configuração de Voz</h3>
+      <p class="text-muted mb-0">
+        Configure o reconhecimento de voz e wake word para interagir com o Axis AI.
+      </p>
+    </header>
+
+    <div class="row">
+      <div class="col-12 col-lg-8">
+        <!-- Suporte do Navegador -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-bottom">
+            <h6 class="mb-0 fw-semibold">
+              <i class="bi bi-info-circle me-2"></i>Suporte do Navegador
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi" [class.bi-check-circle-fill]="speechSupported()" 
+                     [class.bi-x-circle-fill]="!speechSupported()"
+                     [class.text-success]="speechSupported()"
+                     [class.text-danger]="!speechSupported()"
+                     style="font-size: 1.5rem;"></i>
+                  <div>
+                    <strong>Reconhecimento de Voz</strong>
+                    <p class="small text-muted mb-0">
+                      @if (speechSupported()) {
+                        Suportado pelo navegador
+                      } @else {
+                        Não suportado
+                      }
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi" [class.bi-check-circle-fill]="wakeWordSupported()" 
+                     [class.bi-x-circle-fill]="!wakeWordSupported()"
+                     [class.text-success]="wakeWordSupported()"
+                     [class.text-danger]="!wakeWordSupported()"
+                     style="font-size: 1.5rem;"></i>
+                  <div>
+                    <strong>Wake Word</strong>
+                    <p class="small text-muted mb-0">
+                      @if (wakeWordSupported()) {
+                        Suportado pelo navegador
+                      } @else {
+                        Não suportado
+                      }
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            @if (!speechSupported() || !wakeWordSupported()) {
+            <div class="alert alert-warning mt-3 mb-0">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              <strong>Navegador não suportado:</strong> O reconhecimento de voz funciona melhor no Chrome, Edge ou Safari.
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- Wake Word Detection -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-bottom">
+            <h6 class="mb-0 fw-semibold">
+              <i class="bi bi-mic me-2"></i>Wake Word Detection
+            </h6>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">
+              Quando ativado, você pode dizer <strong>"ei axis"</strong> em qualquer página do sistema para abrir o chat do Axis AI automaticamente.
+            </p>
+
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div>
+                <h6 class="fw-semibold mb-1">Ativar Wake Word</h6>
+                <p class="small text-muted mb-0">
+                  @if (wakeWordEnabled()) {
+                    <span class="text-success">
+                      <i class="bi bi-check-circle me-1"></i>Ativado - O sistema está ouvindo em background
+                    </span>
+                  } @else {
+                    <span class="text-muted">
+                      <i class="bi bi-pause-circle me-1"></i>Desativado - Diga "ei axis" para abrir o chat
+                    </span>
+                  }
+                </p>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" 
+                       type="checkbox" 
+                       id="wakeWordToggle"
+                       [checked]="wakeWordEnabled()"
+                       [disabled]="!wakeWordSupported()"
+                       (change)="toggleWakeWord()"
+                       style="width: 3rem; height: 1.5rem;">
+                <label class="form-check-label" for="wakeWordToggle"></label>
+              </div>
+            </div>
+
+            @if (wakeWordEnabled() && isListening()) {
+            <div class="alert alert-info d-flex align-items-center gap-2 mb-0">
+              <div class="spinner-border spinner-border-sm text-primary" role="status">
+                <span class="visually-hidden">Ouvindo...</span>
+              </div>
+              <span class="small">O sistema está ouvindo em background...</span>
+            </div>
+            }
+
+            @if (wakeWordSupported() && wakeWordEnabled()) {
+            <div class="mt-3">
+              <button type="button" class="btn btn-outline-primary btn-sm" (click)="testWakeWord()">
+                <i class="bi bi-play-circle me-1"></i>Testar Wake Word
+              </button>
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- Wake Word -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-bottom">
+            <h6 class="mb-0 fw-semibold">
+              <i class="bi bi-list-ul me-2"></i>Wake Word
+            </h6>
+          </div>
+          <div class="card-body">
+            <p class="text-muted small mb-3">Para abrir o chat, diga:</p>
+            <div class="d-flex flex-wrap gap-2">
+              <span class="badge bg-primary fs-6 px-3 py-2">
+                <i class="bi bi-mic me-1"></i>ei axis
+              </span>
+            </div>
+            <p class="text-muted small mt-3 mb-0">
+              <i class="bi bi-info-circle me-1"></i>
+              A frase deve começar com "ei axis" para ser detectada.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar de Informações -->
+      <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+          <div class="card-header bg-primary text-white">
+            <h6 class="mb-0">
+              <i class="bi bi-info-circle me-2"></i>Informações
+            </h6>
+          </div>
+          <div class="card-body">
+            <h6 class="fw-semibold mb-3">Sobre o Reconhecimento de Voz</h6>
+            <p class="small text-muted mb-3">
+              O sistema usa a Web Speech API do navegador para reconhecimento de voz. Quando o wake word está ativado, o sistema fica sempre ouvindo em background.
+            </p>
+
+            <h6 class="fw-semibold mb-2">Como Funciona</h6>
+            <ol class="small text-muted mb-3">
+              <li>Ative o wake word usando o toggle acima</li>
+              <li>Diga "ei axis" em qualquer página</li>
+              <li>O chat do Axis AI abrirá automaticamente</li>
+              <li>Você pode começar a falar imediatamente</li>
+            </ol>
+
+            <h6 class="fw-semibold mb-2">Privacidade</h6>
+            <p class="small text-muted mb-0">
+              Todo o processamento de voz acontece localmente no seu navegador. Nenhum áudio é enviado para servidores externos.
+            </p>
+
+            <div class="alert alert-warning small mt-3 mb-0">
+              <i class="bi bi-exclamation-triangle me-1"></i>
+              <strong>Nota:</strong> O navegador pode solicitar permissão para usar o microfone na primeira vez.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>

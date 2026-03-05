@@ -56,6 +56,14 @@
               <span class="sidebar-label d-none small ms-2">Axis AI</span>
             </a>
           </li>
+          <li class="nav-item mb-2">
+            <a routerLink="/painel-admin" routerLinkActive="active"
+              class="nav-link text-white d-flex align-items-center justify-content-center py-3 rounded"
+              (click)="closeSidebar()" style="min-height: 64px;">
+              <i class="bi bi-speedometer2 fs-5"></i>
+              <span class="sidebar-label d-none small ms-2">Painel Admin</span>
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -160,6 +168,12 @@
         style="flex: 1;">
         <i class="bi bi-chat-dots fs-5 mb-1"></i>
         <small class="small">Axis AI</small>
+      </a>
+      <a routerLink="/painel-admin" routerLinkActive="active"
+        class="text-decoration-none d-flex flex-column align-items-center justify-content-center nav-mobile-item"
+        style="flex: 1;">
+        <i class="bi bi-speedometer2 fs-5 mb-1"></i>
+        <small class="small">Admin</small>
       </a>
     </div>
   </nav>

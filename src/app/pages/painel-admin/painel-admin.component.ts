@@ -44,6 +44,13 @@ export class PainelAdminComponent {
           color: '#fd7e14'
         },
         {
+          title: 'Configuração de Voz',
+          description: 'Reconhecimento de voz e wake word "ei axis"',
+          route: '/config-voz',
+          icon: 'bi-mic',
+          color: '#6f42c1'
+        },
+        {
           title: 'Axis AI',
           description: 'Assistente virtual para tickets e comandos por voz',
           route: '/chat',

@@ -12,8 +12,8 @@
 </button>
 
 <!-- Chat Flutuante -->
-@if (chatOpen()) {
-<div class="floating-chat-window shadow-lg">
+@if (chatOpen() || chatClosing()) {
+<div #chatWindow class="floating-chat-window shadow-lg" [class.closing]="chatClosing()">
   <!-- Cabeçalho -->
   <div class="chat-header bg-primary text-white d-flex align-items-center gap-2 p-2 p-md-3">
     <div class="bg-white bg-opacity-25 rounded-circle p-2 flex-shrink-0">

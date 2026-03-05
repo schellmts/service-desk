@@ -1,1 +1,14 @@
 /* Estilos opcionais para a página de integração */
+.hover-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-theme="dark"] .hover-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5) !important;
+}
+
+.hover-card {
+  text-decoration: none;
+  color: inherit;
+}

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
+import { WakeWordService } from '../../services/wake-word.service';
 import { FloatingChatComponent } from '../floating-chat/floating-chat.component';
 import Swal from 'sweetalert2';
 
@@ -15,6 +16,7 @@ import Swal from 'sweetalert2';
 export class Layout implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private wakeWordService = inject(WakeWordService);
   theme = inject(ThemeService);
   
   sidebarOpen = false;
@@ -31,6 +33,17 @@ export class Layout implements OnInit {
   ngOnInit(): void {
     // Atualiza o signal inicial
     this.currentUser.set(this.authService.getCurrentUser());
+    
+    // Inicializa o wake word service baseado na configuração salva
+    if (this.wakeWordService.isSupported) {
+      this.wakeWordService.initialize();
+      
+      // Configura o listener para abrir o chat quando detectar wake word
+      this.wakeWordService.wakeWordDetected$.subscribe(() => {
+        // O chat flutuante já tem seu próprio listener, mas garantimos que está ativo
+        // O FloatingChatComponent vai lidar com a abertura do chat
+      });
+    }
   }
 
   toggleSidebar() {

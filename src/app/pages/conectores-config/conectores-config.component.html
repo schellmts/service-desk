@@ -1,0 +1,320 @@
+<app-layout>
+  <div class="px-2 px-md-4 py-3 py-md-4 app-page-content">
+    <header class="mb-4">
+      <nav class="mb-2">
+        <a routerLink="/integracao" class="text-decoration-none text-muted small">
+          <i class="bi bi-arrow-left me-1"></i> Voltar à integração
+        </a>
+      </nav>
+      <h3 class="fw-semibold mb-1" style="font-size: 1.5rem;">Configuração de Conectores</h3>
+      <p class="text-muted mb-0">
+        Configure o método de integração para consulta e criação de tickets.
+      </p>
+    </header>
+
+    <div class="row">
+      <div class="col-12 col-lg-8">
+        <!-- Seleção do Método de Integração -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-bottom">
+            <h6 class="mb-0 fw-semibold">
+              <i class="bi bi-plug me-2"></i>Método de Integração
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <div class="form-check p-3 border rounded-3 cursor-pointer"
+                  [class.border-primary]="metodoIntegracao() === 'backend-proprio'"
+                  [class.bg-light]="metodoIntegracao() === 'backend-proprio'"
+                  (click)="metodoIntegracao.set('backend-proprio')"
+                  style="cursor: pointer;">
+                  <input class="form-check-input" type="radio" name="metodoIntegracao" 
+                    [checked]="metodoIntegracao() === 'backend-proprio'"
+                    (change)="metodoIntegracao.set('backend-proprio')">
+                  <label class="form-check-label w-100">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                      <i class="bi bi-server fs-5 text-primary"></i>
+                      <strong>Backend Próprio</strong>
+                    </div>
+                    <small class="text-muted">Use sua própria API REST para gerenciar tickets</small>
+                  </label>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="form-check p-3 border rounded-3 cursor-pointer"
+                  [class.border-primary]="metodoIntegracao() === 'fluig'"
+                  [class.bg-light]="metodoIntegracao() === 'fluig'"
+                  (click)="metodoIntegracao.set('fluig')"
+                  style="cursor: pointer;">
+                  <input class="form-check-input" type="radio" name="metodoIntegracao" 
+                    [checked]="metodoIntegracao() === 'fluig'"
+                    (change)="metodoIntegracao.set('fluig')">
+                  <label class="form-check-label w-100">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                      <i class="bi bi-cloud fs-5 text-purple"></i>
+                      <strong>Fluig</strong>
+                    </div>
+                    <small class="text-muted">Integre com processos, datasets e formulários do Fluig</small>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Configurações Backend Próprio -->
+        @if (metodoIntegracao() === 'backend-proprio') {
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-bottom">
+            <h6 class="mb-0 fw-semibold">
+              <i class="bi bi-server me-2"></i>Configurações do Backend
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">URL do Backend <span class="text-danger">*</span></label>
+              <input type="url" 
+                class="form-control" 
+                placeholder="https://api.exemplo.com/v1"
+                [value]="backendUrl()"
+                (input)="backendUrl.set($any($event.target).value)">
+              <small class="text-muted">URL base da sua API REST</small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Timeout (segundos)</label>
+              <input type="number" 
+                class="form-control" 
+                min="1"
+                [value]="backendTimeout()"
+                (input)="backendTimeout.set(+$any($event.target).value)">
+              <small class="text-muted">Tempo limite para requisições (padrão: 30s)</small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Headers Personalizados</label>
+              <p class="small text-muted mb-2">Adicione quantos headers forem necessários para autenticação e configuração da API</p>
+              
+              <div class="card border bg-light mb-3">
+                <div class="card-body p-3">
+                  <div class="row g-2">
+                    <div class="col-12 col-md-5">
+                      <input type="text" 
+                        class="form-control form-control-sm" 
+                        placeholder="Nome do header (ex: Authorization)"
+                        [value]="backendHeaderKey()"
+                        (input)="backendHeaderKey.set($any($event.target).value)"
+                        (keyup.enter)="adicionarHeader()">
+                    </div>
+                    <div class="col-12 col-md-5">
+                      <input type="text" 
+                        class="form-control form-control-sm" 
+                        placeholder="Valor do header"
+                        [value]="backendHeaderValue()"
+                        (input)="backendHeaderValue.set($any($event.target).value)"
+                        (keyup.enter)="adicionarHeader()">
+                    </div>
+                    <div class="col-12 col-md-2">
+                      <button type="button" 
+                        class="btn btn-primary btn-sm w-100" 
+                        (click)="adicionarHeader()"
+                        [disabled]="!backendHeaderKey().trim() || !backendHeaderValue().trim()">
+                        <i class="bi bi-plus-lg me-1"></i>Adicionar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              @if (getHeadersKeys().length > 0) {
+              <div class="mt-3">
+                <label class="form-label small fw-semibold mb-2">Headers Adicionados ({{ getHeadersKeys().length }})</label>
+                <div class="list-group">
+                  @for (header of getHeadersKeys(); track header) {
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1">
+                      <strong class="text-primary">{{ header }}</strong>
+                      <span class="text-muted ms-2">{{ getHeaderValue(header) }}</span>
+                    </div>
+                    <button type="button" 
+                      class="btn btn-sm btn-outline-danger" 
+                      (click)="removerHeader(header)"
+                      title="Remover header">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                  }
+                </div>
+              </div>
+              } @else {
+              <div class="alert alert-info small mb-0">
+                <i class="bi bi-info-circle me-1"></i>
+                Nenhum header adicionado. Adicione headers conforme necessário para autenticação da API.
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Configurações Fluig -->
+        @if (metodoIntegracao() === 'fluig') {
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-bottom">
+            <h6 class="mb-0 fw-semibold">
+              <i class="bi bi-cloud me-2"></i>Configurações do Fluig
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label fw-semibold">URL do Fluig <span class="text-danger">*</span></label>
+                <input type="url" 
+                  class="form-control" 
+                  placeholder="https://fluig.exemplo.com/"
+                  [value]="fluigUrl()"
+                  (input)="fluigUrl.set($any($event.target).value)">
+                <small class="text-muted">URL base da instância do Fluig</small>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label fw-semibold">API Key <span class="text-danger">*</span></label>
+                <input type="password" 
+                  class="form-control" 
+                  placeholder="Sua API Key"
+                  [value]="fluigApiKey()"
+                  (input)="fluigApiKey.set($any($event.target).value)">
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label fw-semibold">API Secret <span class="text-danger">*</span></label>
+                <input type="password" 
+                  class="form-control" 
+                  placeholder="Sua API Secret"
+                  [value]="fluigApiSecret()"
+                  (input)="fluigApiSecret.set($any($event.target).value)">
+              </div>
+
+              <div class="col-12">
+                <hr class="my-3">
+                <h6 class="fw-semibold mb-3">Configurações Avançadas (Opcional)</h6>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label fw-semibold">Token</label>
+                <input type="password" 
+                  class="form-control" 
+                  placeholder="Token OAuth"
+                  [value]="fluigToken()"
+                  (input)="fluigToken.set($any($event.target).value)">
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label class="form-label fw-semibold">Token Secret</label>
+                <input type="password" 
+                  class="form-control" 
+                  placeholder="Token Secret OAuth"
+                  [value]="fluigTokenSecret()"
+                  (input)="fluigTokenSecret.set($any($event.target).value)">
+              </div>
+
+              <div class="col-12 col-md-4">
+                <label class="form-label fw-semibold">ID do Processo</label>
+                <input type="text" 
+                  class="form-control" 
+                  placeholder="Ex: 12345"
+                  [value]="fluigProcessoId()"
+                  (input)="fluigProcessoId.set($any($event.target).value)">
+                <small class="text-muted">ID do processo para consulta</small>
+              </div>
+
+              <div class="col-12 col-md-4">
+                <label class="form-label fw-semibold">ID do Dataset</label>
+                <input type="text" 
+                  class="form-control" 
+                  placeholder="Ex: dsTickets"
+                  [value]="fluigDatasetId()"
+                  (input)="fluigDatasetId.set($any($event.target).value)">
+                <small class="text-muted">Dataset para consulta de dados</small>
+              </div>
+
+              <div class="col-12 col-md-4">
+                <label class="form-label fw-semibold">ID do Formulário</label>
+                <input type="text" 
+                  class="form-control" 
+                  placeholder="Ex: 67890"
+                  [value]="fluigFormId()"
+                  (input)="fluigFormId.set($any($event.target).value)">
+                <small class="text-muted">Formulário para criação de tickets</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Status Ativo/Inativo -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-body">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" 
+                [checked]="ativo()"
+                (change)="ativo.set($any($event.target).checked)">
+              <label class="form-check-label fw-semibold">
+                Conector Ativo
+              </label>
+              <small class="text-muted d-block mt-1">
+                Quando ativo, o sistema utilizará esta configuração para integração de tickets.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="d-flex gap-2 justify-content-end">
+          <button type="button" class="btn btn-outline-danger" (click)="limparConfiguracao()">
+            <i class="bi bi-trash me-1"></i>Limpar Configuração
+          </button>
+          <button type="button" class="btn btn-primary" (click)="salvarConfiguracao()" [disabled]="isLoading()">
+            @if (isLoading()) {
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+            }
+            <i class="bi bi-check-lg me-1"></i>Salvar Configuração
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar de Informações -->
+      <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+          <div class="card-header bg-primary text-white">
+            <h6 class="mb-0">
+              <i class="bi bi-info-circle me-2"></i>Informações
+            </h6>
+          </div>
+          <div class="card-body">
+            <h6 class="fw-semibold mb-3">Sobre os Conectores</h6>
+            <p class="small text-muted mb-3">
+              Os conectores permitem integrar o Service Desk com diferentes sistemas externos para consulta e criação de tickets.
+            </p>
+
+            <h6 class="fw-semibold mb-2">Backend Próprio</h6>
+            <p class="small text-muted mb-3">
+              Use sua própria API REST. O sistema fará requisições HTTP para os endpoints configurados.
+            </p>
+
+            <h6 class="fw-semibold mb-2">Fluig</h6>
+            <p class="small text-muted mb-0">
+              Integre com processos, datasets e formulários do Fluig para sincronizar tickets automaticamente.
+            </p>
+
+            <div class="alert alert-warning small mt-3 mb-0">
+              <i class="bi bi-exclamation-triangle me-1"></i>
+              <strong>Nota:</strong> Esta é uma configuração visual. A integração real será implementada posteriormente.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>

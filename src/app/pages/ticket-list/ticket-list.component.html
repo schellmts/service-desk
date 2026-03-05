@@ -1,0 +1,139 @@
+<app-layout>
+  <button header-actions class="btn btn-primary btn-sm d-none d-md-inline" routerLink="/tickets/create">
+    <i class="bi bi-plus-circle me-1"></i>Novo Ticket
+  </button>
+
+  <!-- Conteúdo -->
+  <div class="px-2 px-md-4 py-3 py-md-4 app-page-content">
+        <!-- Título -->
+        <div class="mb-3 mb-md-4">
+          <h3 class="fw-semibold mb-1" style="font-size: 1.5rem;">Lista de Tickets</h3>
+          <p class="text-muted mb-0 d-none d-sm-block">Gerenciar e acompanhar tickets do service desk</p>
+        </div>
+
+        <!-- Barra de Busca -->
+        <div class="mb-4">
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="bi bi-search text-muted"></i>
+            </span>
+            <input 
+              type="text" 
+              class="form-control border-start-0" 
+              placeholder="Buscar por ID, título ou descrição..."
+              [(ngModel)]="searchTerm"
+              (input)="onSearchChange()"
+            >
+          </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="row g-2 g-md-3 mb-3 mb-md-4">
+          <div class="col-12 col-md-6">
+            <label class="form-label small text-muted mb-1">Todos os Status</label>
+            <select class="form-select form-select-sm" [(ngModel)]="statusFiltro" (change)="aplicarFiltros()">
+              <option>Todos os Status</option>
+              <option>Aberto</option>
+              <option>Em Andamento</option>
+              <option>Aguardando</option>
+              <option>Resolvido</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label small text-muted mb-1">Todas Prioridades</label>
+            <select class="form-select form-select-sm" [(ngModel)]="prioridadeFiltro" (change)="aplicarFiltros()">
+              <option>Todas Prioridades</option>
+              <option>Alta</option>
+              <option>Média</option>
+              <option>Baixa</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Cards de Métricas -->
+        <div class="row g-2 g-md-3 mb-3 mb-md-4">
+          <div class="col-6 col-md-3 d-flex">
+            <div class="card border-0 shadow-sm h-100 w-100" style="cursor: pointer;" (click)="statusFiltro = 'Todos os Status'; aplicarFiltros()">
+              <div class="card-body p-3 p-md-4">
+                <h5 class="text-muted small mb-1 mb-md-2">Total de Tickets</h5>
+                <h2 class="mb-0 fw-bold" style="font-size: 1.75rem;">{{ totalTickets }}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 d-flex">
+            <div class="card border-0 shadow-sm h-100 w-100" style="cursor: pointer;" (click)="filtrarPorStatus('Aberto')">
+              <div class="card-body p-3 p-md-4">
+                <h5 class="text-muted small mb-1 mb-md-2">Abertos</h5>
+                <h2 class="mb-0 fw-bold text-primary" style="font-size: 1.75rem;">{{ ticketsAbertos }}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 d-flex">
+            <div class="card border-0 shadow-sm h-100 w-100" style="cursor: pointer;" (click)="filtrarPorStatus('Em Andamento')">
+              <div class="card-body p-3 p-md-4">
+                <h5 class="text-muted small mb-1 mb-md-2">Em Andamento</h5>
+                <h2 class="mb-0 fw-bold text-primary" style="font-size: 1.75rem;">{{ ticketsEmAndamento }}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 d-flex">
+            <div class="card border-0 shadow-sm h-100 w-100" style="cursor: pointer;" (click)="filtrarPorPrioridade('Alta')">
+              <div class="card-body p-3 p-md-4">
+                <h5 class="text-muted small mb-1 mb-md-2">Alta Prioridade</h5>
+                <h2 class="mb-0 fw-bold text-danger" style="font-size: 1.75rem;">{{ ticketsAltaPrioridade }}</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botão Criar Ticket -->
+        <div class="mb-3">
+          <button class="btn btn-primary" routerLink="/tickets/create">
+            <i class="bi bi-plus-circle me-1"></i>Abrir Novo Ticket
+          </button>
+        </div>
+
+        <!-- Lista de Tickets -->
+        <div class="d-flex flex-column gap-2 gap-md-3">
+          <div *ngFor="let ticket of ticketsFiltrados" class="card border-0 shadow-sm" style="cursor: pointer;" (click)="verDetalhes(ticket.id)">
+            <div class="card-body p-3 p-md-4">
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="flex-grow-1">
+                  <div class="d-flex align-items-center gap-1 gap-md-2 mb-2 flex-wrap">
+                    <span class="fw-semibold text-muted small">{{ ticket.id }}</span>
+                    <span class="badge rounded-pill px-2 px-md-3 py-1 small" [ngClass]="getBadgeClassPrioridade(ticket.prioridade)">{{ ticket.prioridade }}</span>
+                    <span class="badge rounded-pill px-2 px-md-3 py-1 small" [ngClass]="getBadgeClassStatus(ticket.status)">{{ ticket.status }}</span>
+                    <span class="badge rounded-pill px-2 px-md-3 py-1 bg-secondary small d-none d-md-inline">{{ ticket.categoria }}</span>
+                  </div>
+                  <h5 class="fw-semibold mb-2" style="font-size: 1.1rem;">{{ ticket.titulo }}</h5>
+                  <p class="text-muted mb-2 mb-md-3 small d-none d-md-block">{{ ticket.descricao }}</p>
+                  <div class="d-flex flex-wrap gap-2 gap-md-4 text-muted small">
+                    <span><i class="bi bi-person me-1"></i>{{ ticket.criadoPor }}</span>
+                    <span class="d-none d-md-inline"><i class="bi bi-calendar me-1"></i>Criado: {{ ticket.dataCriacao }}</span>
+                    <span class="d-none d-lg-inline"><i class="bi bi-clock me-1"></i>Atualizado: {{ ticket.dataAtualizacao }}</span>
+                  </div>
+                </div>
+                <div>
+                  <button class="btn btn-link text-muted p-0" (click)="verDetalhes(ticket.id); $event.stopPropagation()">
+                    <i class="bi bi-three-dots-vertical fs-5"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Mensagem quando não há tickets -->
+          <div *ngIf="ticketsFiltrados.length === 0" class="card border-0 shadow-sm">
+            <div class="card-body p-5 text-center">
+              <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
+              <h5 class="fw-semibold mb-2">Nenhum ticket encontrado</h5>
+              <p class="text-muted mb-4">Não há tickets que correspondam aos filtros aplicados.</p>
+              <button class="btn btn-primary" routerLink="/tickets/create">
+                <i class="bi bi-plus-circle me-1"></i>Abrir Novo Ticket
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+</app-layout>

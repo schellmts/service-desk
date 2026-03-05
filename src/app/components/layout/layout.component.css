@@ -1,0 +1,279 @@
+/* Sidebar usando Bootstrap Nav */
+.sidebar-nav {
+  transition: width 0.3s ease, transform 0.3s ease-in-out;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.text-white {
+  color: #fff !important;
+}
+
+.sidebar-nav:not(.show) {
+  transform: translateX(-100%);
+}
+
+@media (min-width: 768px) {
+  .sidebar-nav {
+    transform: translateX(0) !important;
+  }
+
+  /* Expansão no hover usando apenas Bootstrap */
+  .sidebar-nav:hover {
+    width: 220px !important;
+  }
+
+  .sidebar-nav:hover .sidebar-label {
+    display: inline-block !important;
+  }
+
+  .sidebar-nav:hover .nav-link {
+    justify-content: flex-start !important;
+    padding-left: 1rem !important;
+  }
+
+  .sidebar-nav .nav-link {
+    justify-content: center;
+  }
+}
+
+/* Estilização dos nav-links usando Bootstrap */
+.sidebar-nav .nav-link {
+  transition: all 0.2s ease;
+  border-radius: 0.5rem !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.sidebar-nav .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+}
+
+.sidebar-nav .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.sidebar-nav .nav-link i {
+  transition: transform 0.2s ease;
+}
+
+.sidebar-nav .nav-link:hover i {
+  transform: scale(1.1);
+}
+
+.sidebar-label {
+  display: none;
+  white-space: nowrap;
+}
+
+/* Sidebar responsiva mobile */
+@media (max-width: 767.98px) {
+  .sidebar-nav {
+    width: 250px !important;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar-nav .nav-link {
+    min-height: 56px !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    padding: 0.75rem 1rem !important;
+  }
+
+  .sidebar-nav .nav-link i {
+    margin-right: 0.75rem;
+  }
+
+  .sidebar-nav .sidebar-label {
+    display: inline-block !important;
+  }
+
+  .content-wrapper {
+    margin-left: 0 !important;
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+
+  .overlay.show {
+    display: block;
+  }
+
+  .hamburger-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .hamburger-btn i {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* Navbar Mobile */
+@media (max-width: 768px) {
+  .content-area {
+    padding-bottom: 70px !important;
+  }
+
+  .navbar.fixed-bottom .nav-mobile-item {
+    color: #6c757d;
+    transition: all 0.2s ease-in-out;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+
+  .navbar.fixed-bottom .nav-mobile-item i {
+    color: #6c757d;
+    transition: color 0.2s ease-in-out;
+  }
+
+  .navbar.fixed-bottom .nav-mobile-item.active,
+  .navbar.fixed-bottom .nav-mobile-item.router-link-active {
+    color: var(--app-focus);
+    background-color: rgba(var(--app-focus-rgb), 0.15);
+  }
+
+  .navbar.fixed-bottom .nav-mobile-item.active i,
+  .navbar.fixed-bottom .nav-mobile-item.router-link-active i {
+    color: var(--app-focus);
+  }
+
+  .navbar.fixed-bottom .nav-mobile-item small {
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+
+  .navbar.fixed-bottom .nav-mobile-item.active small,
+  .navbar.fixed-bottom .nav-mobile-item.router-link-active small {
+    font-weight: 600;
+  }
+}
+
+/* Header responsivo */
+.header-title {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.header-title h4 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 576px) {
+  .header-title h4 {
+    font-size: 1.1rem;
+  }
+
+  .header-title small {
+    font-size: 0.7rem;
+  }
+
+  .header-user-info {
+    display: none !important;
+  }
+}
+
+/* Correção para navbar não quebrar */
+.content-wrapper {
+  width: 100%;
+  min-width: 0;
+}
+
+header {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Garantir que o header não quebre */
+@media (max-width: 992px) {
+  .header-title {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-title {
+    max-width: 150px;
+  }
+}
+
+.min-w-200 {
+  min-width: 200px;
+}
+
+/* Logo sidebar: div redonda branca com logo mini */
+.sidebar-logo-wrap {
+  flex-shrink: 0;
+  overflow: hidden;
+  padding: 2px;
+}
+.sidebar-logo-mini {
+  display: block;
+}
+
+/* Tema: header e navbar usam variáveis */
+.app-header {
+  background-color: var(--app-header-bg) !important;
+  color: var(--app-text);
+}
+
+.app-header-title,
+.app-header-user-name,
+.app-header-btn,
+.app-header-subtitle {
+  color: var(--app-text) !important;
+}
+
+.app-header-subtitle.text-muted {
+  color: var(--app-text-muted) !important;
+}
+
+.theme-toggle {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.app-user-trigger {
+  color: var(--app-text) !important;
+}
+
+.app-navbar-mobile {
+  background-color: var(--app-header-bg) !important;
+  border-color: var(--app-border) !important;
+}
+
+/* Transição suave do dropdown do usuário (abrir e fechar) */
+.header-user-info .dropdown-menu {
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+.header-user-info .dropdown .dropdown-menu {
+  opacity: 0;
+  transform: translateY(-8px);
+  visibility: hidden;
+  pointer-events: none;
+  display: block !important; /* mantém no fluxo para a transição de fechar */
+}
+.header-user-info .dropdown.show .dropdown-menu {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+.header-user-info .dropdown-menu .dropdown-item {
+  transition: background-color 0.15s ease;
+}

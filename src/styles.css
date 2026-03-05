@@ -1,0 +1,279 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+:root {
+  --bs-primary: #06002E;
+  --bs-primary-rgb: 6, 0, 46;
+  /* Tema claro (padrão) */
+  --app-bg: #f8f9fa;
+  --app-surface: #ffffff;
+  --app-surface-elevated: #ffffff;
+  --app-text: #212529;
+  --app-text-muted: #6c757d;
+  --app-border: #dee2e6;
+  --app-header-bg: #ffffff;
+  --app-focus: #06002E;
+  --app-focus-rgb: 6, 0, 46;
+  --app-input-bg: #ffffff;
+  --app-card-bg: #ffffff;
+}
+
+/* Botões primary e outline sempre no azul #06002E */
+.btn-primary {
+  background-color: #06002E !important;
+  border-color: #06002E !important;
+  color: #fff !important;
+}
+.btn-primary:hover {
+  background-color: #0a0040 !important;
+  border-color: #0a0040 !important;
+  color: #fff !important;
+}
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: #050025 !important;
+  border-color: #050025 !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 0.2rem rgba(6, 0, 46, 0.35) !important;
+}
+.btn-outline-primary {
+  color: #06002E !important;
+  border-color: #06002E !important;
+  background-color: transparent !important;
+}
+.btn-outline-primary:hover {
+  color: #fff !important;
+  background-color: #06002E !important;
+  border-color: #06002E !important;
+}
+.btn-outline-primary:focus {
+  box-shadow: 0 0 0 0.2rem rgba(6, 0, 46, 0.35) !important;
+}
+
+[data-theme="dark"] {
+  --app-bg: #0c0c12;
+  --app-surface: #14141f;
+  --app-surface-elevated: #1a1a28;
+  --app-text: #e9ecef;
+  --app-text-muted: #adb5bd;
+  --app-border: #2d2d3d;
+  --app-header-bg: #14141f;
+  --app-focus: #06002E;
+  --app-focus-rgb: 6, 0, 46;
+  --app-input-bg: #1a1a28;
+  --app-card-bg: #14141f;
+  --bs-body-bg: #0c0c12;
+  --bs-body-color: #e9ecef;
+}
+
+/* Componentes que usam o tema */
+[data-theme="dark"] .card,
+[data-theme="dark"] .bg-white {
+  background-color: var(--app-card-bg) !important;
+  border-color: var(--app-border) !important;
+  color: var(--app-text);
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+  background-color: var(--app-input-bg);
+  border-color: var(--app-border);
+  color: var(--app-text);
+}
+
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+  border-color: var(--app-focus);
+  box-shadow: 0 0 0 0.2rem rgba(var(--app-focus-rgb), 0.35);
+}
+
+[data-theme="dark"] .table {
+  color: var(--app-text);
+  --bs-table-bg: var(--app-surface);
+  --bs-table-border-color: var(--app-border);
+}
+
+[data-theme="dark"] .table-light {
+  --bs-table-bg: var(--app-surface-elevated);
+  --bs-table-border-color: var(--app-border);
+}
+
+[data-theme="dark"] .text-muted {
+  color: var(--app-text-muted) !important;
+}
+
+[data-theme="dark"] .border,
+[data-theme="dark"] .border-top,
+[data-theme="dark"] .border-bottom {
+  border-color: var(--app-border) !important;
+}
+
+[data-theme="dark"] .dropdown-menu {
+  background-color: var(--app-surface-elevated);
+  border-color: var(--app-border);
+}
+
+[data-theme="dark"] .dropdown-item {
+  color: var(--app-text);
+}
+
+[data-theme="dark"] .dropdown-item:hover,
+[data-theme="dark"] .dropdown-item:focus {
+  background-color: rgba(var(--app-focus-rgb), 0.15);
+  color: var(--app-text);
+}
+
+[data-theme="dark"] .dropdown-divider {
+  border-color: var(--app-border);
+}
+
+/* Área de conteúdo das páginas */
+.app-page-content {
+  background-color: var(--app-bg);
+  min-height: calc(100vh - 80px);
+  transition: background-color 0.25s ease;
+}
+
+.app-text {
+  color: var(--app-text);
+}
+
+.app-section-icon {
+  background-color: rgba(var(--app-focus-rgb), 0.12);
+  color: var(--app-focus);
+}
+
+[data-theme="dark"] .login-form-panel {
+  background-color: var(--app-surface);
+  color: var(--app-text);
+}
+
+[data-theme="dark"] .login-form-panel .form-control {
+  background-color: var(--app-input-bg);
+  border-color: var(--app-border);
+  color: var(--app-text);
+}
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--app-bg);
+  color: var(--app-text);
+  transition: background-color 0.25s ease, color 0.2s ease;
+}
+
+/* Responsividade Global */
+@media (max-width: 768px) {
+  /* Sidebar responsiva para páginas que não usam layout compartilhado */
+  .position-fixed[style*="width: 80px"] {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .position-fixed[style*="width: 80px"].show {
+    transform: translateX(0);
+  }
+  
+  /* Ajustar margin-left do conteúdo quando sidebar está oculta */
+  .col[style*="margin-left: 80px"] {
+    margin-left: 0 !important;
+  }
+  
+  /* Overlay para mobile */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+  }
+  
+  .sidebar-overlay.show {
+    display: block;
+  }
+  
+  /* Header responsivo */
+  .header-user-info {
+    display: none !important;
+  }
+  
+  /* Cards de métricas menores em mobile */
+  .card-body h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  /* Tabelas responsivas */
+  .table-responsive {
+    font-size: 0.875rem;
+  }
+  
+  /* Badges menores em mobile */
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem !important;
+  }
+  
+  /* Botões menores */
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Títulos menores */
+  h3 {
+    font-size: 1.25rem !important;
+  }
+  
+  h4 {
+    font-size: 1.1rem !important;
+  }
+  
+  h5 {
+    font-size: 1rem !important;
+  }
+  
+  /* Padding reduzido */
+  .px-4 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .py-4 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+  
+  /* Cards menores */
+  .card-body {
+    padding: 1rem !important;
+  }
+  
+  /* Gráficos menores */
+  [style*="height: 350px"] {
+    height: 250px !important;
+    min-height: 200px !important;
+  }
+  
+  /* Kanban columns menores */
+  [style*="min-width: 280px"] {
+    min-width: 200px !important;
+  }
+}
+
+/* Ajustes para tablets */
+@media (min-width: 577px) and (max-width: 991px) {
+  .card-body h2 {
+    font-size: 2rem !important;
+  }
+  
+  [style*="height: 350px"] {
+    height: 300px !important;
+  }
+}

@@ -1,0 +1,95 @@
+<div class="container-fluid vh-100 p-0 d-flex">
+  <!-- Painel Esquerdo - Logo full -->
+  <div class="d-none d-md-flex col-md-8 bg-primary text-white align-items-center justify-content-center" style="background: linear-gradient(135deg, #06002E 0%, #0d0044 100%);">
+    <div class="text-center px-4">
+      <div class="mb-4">
+        <img src="logos/logofull.png" alt="AXIS Service Desk" class="img-fluid" style="max-height: 120px; width: auto; object-fit: contain;">
+      </div>
+      <h3 class="fw-bold mb-3" style="font-size: 2rem;">Service Desk</h3>
+      <p class="lead mb-0" style="opacity: 0.9; font-size: 1.1rem;">Sistema de Gestão de Chamados</p>
+    </div>
+  </div>
+
+  <!-- Painel Direito - Formulário (menor) -->
+  <div class="col-12 col-md-4 d-flex align-items-center justify-content-center p-4 login-form-panel">
+    <div class="w-100" style="max-width: 400px;">
+      <!-- Título -->
+      <div class="mb-4">
+        <h2 class="fw-bold mb-2">Bem-vindo ao AXIS Service Desk</h2>
+        <p class="text-muted mb-0">A Melhor Central de Serviços Para Sua Empresa</p>
+      </div>
+
+      <!-- Formulário de Login -->
+      <form (ngSubmit)="onSubmit()">
+        <!-- Campo Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label fw-semibold">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            [(ngModel)]="email"
+            name="email"
+            placeholder="seu.email@empresa.com"
+            required
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Campo Senha -->
+        <div class="mb-4">
+          <label for="senha" class="form-label fw-semibold">
+            Senha
+          </label>
+          <div class="input-group">
+            <input
+              [type]="mostrarSenha ? 'text' : 'password'"
+              id="senha"
+              class="form-control"
+              [(ngModel)]="senha"
+              name="senha"
+              placeholder="Digite sua senha"
+              required
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="toggleMostrarSenha()"
+              tabindex="-1"
+            >
+              <i [class]="mostrarSenha ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mensagem de Erro -->
+        @if (error) {
+        <div class="alert alert-danger mb-3" role="alert">
+          <small>{{ error }}</small>
+        </div>
+        }
+
+        <!-- Botão de Login -->
+        <button type="submit" class="btn btn-primary w-100" [disabled]="loading">
+          @if (loading) {
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          <span>Entrando...</span>
+          } @else {
+          Entrar
+          }
+        </button>
+
+        <!-- Credenciais de teste -->
+        <div class="mt-4 p-3 bg-light rounded">
+          <small class="text-muted d-block mb-2 fw-semibold">Credenciais de teste:</small>
+          <small class="text-muted d-block">Admin: admin&#64;axis.com / admin123</small>
+          <small class="text-muted d-block">Usuário: user&#64;axis.com / user123</small>
+          <small class="text-muted d-block">Técnico: tecnico&#64;axis.com / tec123</small>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

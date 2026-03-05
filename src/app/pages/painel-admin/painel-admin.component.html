@@ -1,0 +1,55 @@
+<app-layout>
+  <div class="app-page-content px-2 px-md-4 py-3 py-md-4">
+    <header class="mb-4">
+      <h3 class="fw-semibold mb-1 app-text" style="font-size: 1.5rem;">Painel Administrativo</h3>
+      <p class="text-muted mb-0">
+        @if (currentUser()) {
+        Olá, {{ currentUser()!.nome }}. Selecione uma funcionalidade para acessar.
+        } @else {
+        Selecione uma funcionalidade para acessar.
+        }
+      </p>
+    </header>
+
+    @for (section of sections; track section.title) {
+    <section class="mb-4 mb-md-5">
+      <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="rounded-2 d-flex align-items-center justify-content-center flex-shrink-0 app-section-icon"
+          style="width: 40px; height: 40px;">
+          <i class="bi" [class]="section.icon" style="font-size: 1.25rem;"></i>
+        </div>
+        <div>
+          <h4 class="fw-semibold mb-0 app-text" style="font-size: 1.15rem;">{{ section.title }}</h4>
+          @if (section.subtitle) {
+          <p class="text-muted small mb-0">{{ section.subtitle }}</p>
+          }
+        </div>
+      </div>
+      <div class="row g-3 g-md-4">
+        @for (card of section.cards; track card.route) {
+        <div class="col-12 col-sm-6 col-lg-4">
+          <a [routerLink]="card.route" class="admin-card text-decoration-none d-block h-100">
+            <div class="card border-0 shadow-sm h-100 admin-card-inner">
+              <div class="card-body p-4 d-flex flex-column">
+                <div class="d-flex align-items-start gap-3">
+                  <div class="admin-card-icon rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                    [style.background-color]="card.color + '20'"
+                    [style.color]="card.color">
+                    <i [class]="'bi ' + card.icon" style="font-size: 1.75rem;"></i>
+                  </div>
+                  <div class="flex-grow-1 min-w-0">
+                    <h5 class="fw-semibold mb-1 app-text">{{ card.title }}</h5>
+                    <p class="text-muted small mb-0">{{ card.description }}</p>
+                  </div>
+                  <i class="bi bi-chevron-right text-muted flex-shrink-0 align-self-center"></i>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        }
+      </div>
+    </section>
+    }
+  </div>
+</app-layout>

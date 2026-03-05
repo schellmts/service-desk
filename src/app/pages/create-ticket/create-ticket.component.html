@@ -1,0 +1,157 @@
+<app-layout>
+  <button header-actions class="btn btn-primary btn-sm d-none d-md-inline-flex align-items-center gap-1 shadow-sm" routerLink="/tickets/create" style="font-weight: 500;">
+    <i class="bi bi-plus-circle"></i>
+    <span>Novo Ticket</span>
+  </button>
+
+  <div class="flex-grow-1 px-2 px-md-4 py-3 py-md-4 app-page-content">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card create-ticket-card border-0 shadow-sm overflow-hidden">
+          <div class="card-header create-ticket-header py-3 px-4">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-3">
+                <div class="create-ticket-header-icon rounded-2 d-flex align-items-center justify-content-center">
+                  <i class="bi bi-ticket-perforated-fill"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0 fw-semibold create-ticket-title">Abrir novo chamado</h5>
+                  <p class="mb-0 small opacity-85">Preencha os dados abaixo para registrar a solicitação</p>
+                </div>
+              </div>
+              <button type="button" class="btn btn-link text-white p-2 rounded-circle opacity-75 hover-opacity-100" (click)="cancelar()" title="Fechar">
+                <i class="bi bi-x-lg fs-5"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body p-4">
+            <form (ngSubmit)="criarTicket(); $event.preventDefault()">
+              <!-- Seção: Chamado -->
+              <div class="create-ticket-section">
+                <div class="create-ticket-section-title">
+                  <i class="bi bi-pencil-square me-2"></i>
+                  <span>Dados do chamado</span>
+                </div>
+                <div class="create-ticket-section-body">
+                  <div class="mb-3">
+                    <label for="titulo" class="form-label">Título <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-lg" id="titulo" [(ngModel)]="novoTicket.titulo" name="titulo" placeholder="Ex: Computador não liga" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="descricao" class="form-label">Descrição <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="descricao" [(ngModel)]="novoTicket.descricao" name="descricao" rows="4" placeholder="Descreva o problema ou solicitação com o máximo de detalhes possível." required></textarea>
+                    <div class="form-text">Quanto mais detalhes, mais rápido o atendimento.</div>
+                  </div>
+                  <div class="row g-3">
+                    <div class="col-sm-6">
+                      <label for="prioridade" class="form-label">Prioridade</label>
+                      <select class="form-select" id="prioridade" [(ngModel)]="novoTicket.prioridade" name="prioridade">
+                        <option value="Baixa">Baixa</option>
+                        <option value="Média" selected>Média</option>
+                        <option value="Alta">Alta</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="categoria" class="form-label">Categoria</label>
+                      <select class="form-select" id="categoria" [(ngModel)]="novoTicket.categoria" name="categoria">
+                        <option value="Hardware">Hardware</option>
+                        <option value="Software">Software</option>
+                        <option value="Acesso">Acesso</option>
+                        <option value="Rede">Rede</option>
+                        <option value="Outros" selected>Outros</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Seção: Solicitante -->
+              <div class="create-ticket-section">
+                <div class="create-ticket-section-title">
+                  <i class="bi bi-person me-2"></i>
+                  <span>Solicitante</span>
+                </div>
+                <div class="create-ticket-section-body">
+                  <div class="row g-3">
+                    <div class="col-sm-6">
+                      <label for="criadoPor" class="form-label">Nome</label>
+                      <input type="text" class="form-control" id="criadoPor" [(ngModel)]="novoTicket.criadoPor" name="criadoPor" placeholder="Nome completo">
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="emailSolicitante" class="form-label">E-mail</label>
+                      <input type="email" class="form-control" id="emailSolicitante" [(ngModel)]="novoTicket.emailSolicitante" name="emailSolicitante" placeholder="email&#64;empresa.com">
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="telefoneSolicitante" class="form-label">Telefone</label>
+                      <input type="tel" class="form-control" id="telefoneSolicitante" [(ngModel)]="novoTicket.telefoneSolicitante" name="telefoneSolicitante" placeholder="(00) 00000-0000">
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="localizacao" class="form-label">Localização</label>
+                      <input type="text" class="form-control" id="localizacao" [(ngModel)]="novoTicket.localizacao" name="localizacao" placeholder="Sala, setor, andar">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Seção: Atendimento -->
+              <div class="create-ticket-section">
+                <div class="create-ticket-section-title">
+                  <i class="bi bi-gear me-2"></i>
+                  <span>Atendimento</span>
+                </div>
+                <div class="create-ticket-section-body">
+                  <div class="row g-3">
+                    <div class="col-sm-6">
+                      <label for="atribuidoA" class="form-label">Atribuir a</label>
+                      <select class="form-select" id="atribuidoA" [(ngModel)]="novoTicket.atribuidoA" name="atribuidoA">
+                        <option value="">Selecione um técnico</option>
+                        <option value="João Silva">João Silva</option>
+                        <option value="Maria Santos">Maria Santos</option>
+                        <option value="Pedro Costa">Pedro Costa</option>
+                        <option value="Ana Oliveira">Ana Oliveira</option>
+                        <option value="Administrador">Administrador</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="status" class="form-label">Status inicial</label>
+                      <select class="form-select" id="status" [(ngModel)]="novoTicket.status" name="status">
+                        <option value="Aberto" selected>Aberto</option>
+                        <option value="Em Andamento">Em Andamento</option>
+                        <option value="Aguardando">Aguardando</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="equipamento" class="form-label">Equipamento</label>
+                      <input type="text" class="form-control" id="equipamento" [(ngModel)]="novoTicket.equipamento" name="equipamento" placeholder="Ex: PC-001, Notebook">
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="sla" class="form-label">SLA</label>
+                      <select class="form-select" id="sla" [(ngModel)]="novoTicket.sla" name="sla">
+                        <option value="">Selecione o SLA</option>
+                        <option value="2 horas">2 horas (Crítico)</option>
+                        <option value="4 horas">4 horas (Alto)</option>
+                        <option value="8 horas">8 horas (Médio)</option>
+                        <option value="24 horas">24 horas (Baixo)</option>
+                        <option value="48 horas">48 horas (Padrão)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ações -->
+              <div class="create-ticket-actions d-flex flex-column flex-sm-row gap-2 justify-content-end mt-4 pt-4 border-top">
+                <button type="button" class="btn btn-outline-secondary order-sm-2 order-1" (click)="cancelar()">
+                  <i class="bi bi-x-lg me-2"></i>Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary order-sm-1 order-2" [disabled]="!novoTicket.titulo.trim() || !novoTicket.descricao.trim()">
+                  <i class="bi bi-check2-circle me-2"></i>Criar chamado
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>

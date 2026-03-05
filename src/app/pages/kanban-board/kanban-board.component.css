@@ -1,0 +1,64 @@
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  opacity: 0.9;
+  background: white;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.3;
+  border: 2px dashed #06002E;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  min-height: 120px;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging .card:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list {
+  min-height: 100px;
+}
+
+.cdk-drop-list.cdk-drop-list-dragging {
+  background-color: rgba(30, 58, 95, 0.05);
+  border-radius: 4px;
+}
+
+.cdk-drop-list:empty,
+.cdk-drop-list:has(.text-muted:only-child) {
+  border: 2px dashed #dee2e6;
+  border-radius: 4px;
+  background-color: rgba(30, 58, 95, 0.02);
+}
+
+.card-placeholder {
+  min-height: 120px;
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  background: var(--app-bg);
+  margin-bottom: 1rem;
+}
+
+a.active i {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+a:not(.active) i {
+  opacity: 0.7;
+  transition: all 0.2s;
+}
+
+a:not(.active):hover i {
+  opacity: 1;
+}
+

@@ -1,0 +1,169 @@
+<div class="container-fluid p-0 vh-100">
+  <div class="row g-0 h-100">
+    <!-- Overlay para mobile -->
+    <div class="overlay" [class.show]="sidebarOpen" (click)="closeSidebar()"></div>
+
+    <!-- Sidebar Esquerda -->
+    <nav class="col-auto position-fixed start-0 top-0 text-white sidebar-nav" [class.show]="sidebarOpen"
+      style="background-color: #06002E; width: 80px; height: 100vh; z-index: 1001;">
+      <div class="d-flex flex-column h-100 py-3">
+        <!-- Botão fechar em mobile -->
+        <div class="d-flex justify-content-end d-md-none mb-3 px-2">
+          <button class="btn btn-link text-white p-1" (click)="closeSidebar()" type="button">
+            <i class="bi bi-x-lg fs-5"></i>
+          </button>
+        </div>
+
+        <!-- Logo mini -->
+        <div class="text-center mb-4 px-2">
+          <div class="sidebar-logo-wrap rounded-circle d-inline-flex align-items-center justify-content-center bg-white"
+            style="width: 48px; height: 48px;">
+            <img src="logos/logomini.png" alt="AXIS" class="sidebar-logo-mini" style="width: 28px; height: 28px; object-fit: contain;">
+          </div>
+        </div>
+
+        <!-- Menu Items -->
+        <ul class="nav nav-pills flex-column flex-grow-1 px-2 mb-auto">
+          <li class="nav-item mb-2">
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              class="nav-link text-white d-flex align-items-center justify-content-center py-3 rounded"
+              (click)="closeSidebar()" style="min-height: 64px;">
+              <i class="bi bi-grid-3x3-gap fs-5"></i>
+              <span class="sidebar-label d-none small ms-2">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a routerLink="/tickets" routerLinkActive="active"
+              class="nav-link text-white d-flex align-items-center justify-content-center py-3 rounded"
+              (click)="closeSidebar()" style="min-height: 64px;">
+              <i class="bi bi-stack fs-5"></i>
+              <span class="sidebar-label d-none small ms-2">Tickets</span>
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a routerLink="/kanban" routerLinkActive="active"
+              class="nav-link text-white d-flex align-items-center justify-content-center py-3 rounded"
+              (click)="closeSidebar()" style="min-height: 64px;">
+              <i class="bi bi-kanban fs-5"></i>
+              <span class="sidebar-label d-none small ms-2">Kanban</span>
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a routerLink="/chat" routerLinkActive="active"
+              class="nav-link text-white d-flex align-items-center justify-content-center py-3 rounded"
+              (click)="closeSidebar()" style="min-height: 64px;">
+              <i class="bi bi-chat-dots fs-5"></i>
+              <span class="sidebar-label d-none small ms-2">Axis AI</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="col d-flex flex-column content-wrapper" style="margin-left: 80px;">
+      <!-- Header -->
+      <header class="app-header border-bottom px-3 px-md-4 py-2 py-md-3 position-sticky top-0 shadow-sm"
+        style="z-index: 999; width: 100%;">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-3 flex-grow-1 min-w-0">
+            <button class="btn btn-link d-md-none hamburger-btn app-header-btn" (click)="toggleSidebar()" type="button"
+              style="padding: 0.5rem; min-width: 44px; min-height: 44px; flex-shrink: 0;">
+              <i class="bi bi-list" style="font-size: 1.75rem;"></i>
+            </button>
+            <div class="header-title flex-grow-1 min-w-0">
+              <h4 class="mb-0 fw-semibold text-truncate app-header-title" style="font-size: 1.25rem;">AXIS Service Desk
+              </h4>
+              <small class="d-none d-sm-inline app-header-subtitle" style="font-size: 0.75rem;">Sistema de Gestão de
+                Tickets</small>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2 gap-md-3 flex-shrink-0">
+            <button type="button" class="btn btn-link d-flex align-items-center justify-content-center rounded app-header-btn theme-toggle"
+              (click)="toggleTheme()" [attr.aria-label]="theme.isDark() ? 'Ativar tema claro' : 'Ativar modo escuro'" title="{{ theme.isDark() ? 'Tema claro' : 'Modo escuro' }}">
+              @if (theme.isDark()) {
+              <i class="bi bi-sun-fill" style="font-size: 1.25rem;"></i>
+              } @else {
+              <i class="bi bi-moon-stars-fill" style="font-size: 1.25rem;"></i>
+              }
+            </button>
+            <ng-content select="[header-actions]"></ng-content>
+            <div class="dropdown header-user-info d-none d-md-flex">
+              <button type="button" class="btn btn-link d-flex align-items-center gap-2 p-2 rounded text-start text-decoration-none app-header-btn app-user-trigger"
+                data-bs-toggle="dropdown" aria-expanded="false" title="Menu do usuário">
+                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm flex-shrink-0"
+                  style="width: 42px; height: 42px;">
+                  <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="d-none d-lg-block text-start">
+                  @if (currentUser()) {
+                  <div class="fw-semibold small text-truncate app-header-user-name" style="max-width: 150px;">{{ currentUser()!.nome }}</div>
+                  <div class="text-muted text-truncate" style="font-size: 0.7rem; max-width: 150px;">{{ currentUser()!.email }}</div>
+                  } @else {
+                  <div class="fw-semibold small text-truncate app-header-user-name" style="max-width: 150px;">Usuário</div>
+                  <div class="text-muted text-truncate" style="font-size: 0.7rem; max-width: 150px;">Não logado</div>
+                  }
+                </div>
+                <i class="bi bi-chevron-down small ms-1 app-header-btn"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2 min-w-200">
+                <li>
+                  <a class="dropdown-item d-flex align-items-center gap-2" routerLink="/painel-admin">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Painel administrador</span>
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <button type="button" class="dropdown-item d-flex align-items-center gap-2 text-danger" (click)="logout()">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Sair</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Conteúdo da Página -->
+      <div class="flex-grow-1 content-area" style="overflow-y: auto; padding-bottom: 0;">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar Mobile (Bottom) -->
+  <nav class="navbar navbar-light border-top d-md-none fixed-bottom shadow-sm app-navbar-mobile"
+    style="z-index: 1000; padding: 0.5rem 0; height: 70px;">
+    <div class="container-fluid d-flex justify-content-around align-items-center h-100">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+        class="text-decoration-none d-flex flex-column align-items-center justify-content-center nav-mobile-item"
+        style="flex: 1;">
+        <i class="bi bi-grid-3x3-gap fs-5 mb-1"></i>
+        <small class="small">Dashboard</small>
+      </a>
+      <a routerLink="/tickets" routerLinkActive="active"
+        class="text-decoration-none d-flex flex-column align-items-center justify-content-center nav-mobile-item"
+        style="flex: 1;">
+        <i class="bi bi-stack fs-5 mb-1"></i>
+        <small class="small">Tickets</small>
+      </a>
+      <a routerLink="/kanban" routerLinkActive="active"
+        class="text-decoration-none d-flex flex-column align-items-center justify-content-center nav-mobile-item"
+        style="flex: 1;">
+        <i class="bi bi-kanban fs-5 mb-1"></i>
+        <small class="small">Kanban</small>
+      </a>
+      <a routerLink="/chat" routerLinkActive="active"
+        class="text-decoration-none d-flex flex-column align-items-center justify-content-center nav-mobile-item"
+        style="flex: 1;">
+        <i class="bi bi-chat-dots fs-5 mb-1"></i>
+        <small class="small">Axis AI</small>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Chat Flutuante -->
+  <app-floating-chat></app-floating-chat>
+</div>

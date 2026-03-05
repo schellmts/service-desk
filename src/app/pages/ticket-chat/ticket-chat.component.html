@@ -1,0 +1,213 @@
+<app-layout>
+  <div class="container-fluid py-4 app-page-content">
+    <div class="container-lg">
+      <header class="d-flex align-items-center gap-3 pb-4 mb-4 border-bottom">
+        <div class="bg-primary p-2 rounded text-white shadow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="h3 mb-0 fw-bold">Axis AI - Assistente Virtual</h1>
+          <p class="text-muted small mb-0">Descreva seu problema e eu criarei um ticket automaticamente</p>
+        </div>
+      </header>
+
+      <div class="row">
+        <div class="col-12 col-lg-10 mx-auto">
+          <div class="card shadow-sm border-0" style="height: 600px; display: flex; flex-direction: column;">
+            <!-- Cabeçalho do Chat -->
+            <div class="card-header bg-primary text-white d-flex align-items-center gap-2">
+              <div class="bg-white bg-opacity-25 rounded-circle p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+              </div>
+              <div>
+                <div class="fw-semibold">Axis AI</div>
+                <small class="opacity-75">Online</small>
+              </div>
+            </div>
+
+            <!-- Área de Mensagens -->
+            <div #chatContainer class="card-body flex-grow-1 overflow-auto p-4 app-page-content">
+              @for (message of messages(); track message.id) {
+              <div class="mb-4 d-flex" [class.justify-content-end]="message.type === 'user'"
+                [class.justify-content-start]="message.type !== 'user'">
+                @if (message.type === 'user') {
+                <div class="bg-primary text-white rounded-4 px-4 py-2 shadow-sm" style="max-width: 75%;">
+                  @if (message.attachment) {
+                  <div class="mb-2">
+                    @if (message.attachment.type.startsWith('image/')) {
+                    <img [src]="'data:' + message.attachment.type + ';base64,' + message.attachment.data" 
+                         [alt]="message.attachment.name"
+                         style="max-width: 100%; max-height: 200px; border-radius: 8px; object-fit: contain;">
+                    } @else {
+                    <div class="d-flex align-items-center gap-2 bg-white bg-opacity-20 rounded p-2">
+                      <i [class]="'bi ' + getFileIcon(message.attachment.name)" style="font-size: 20px;"></i>
+                      <span class="small">{{ message.attachment.name }}</span>
+                    </div>
+                    }
+                  </div>
+                  }
+                  @if (message.content) {
+                  <div [innerHTML]="formatMessage(message.content)"></div>
+                  }
+                  <small class="d-block mt-1 opacity-75" style="font-size: 0.7rem;">
+                    {{ message.timestamp | date:'HH:mm' }}
+                  </small>
+                </div>
+                } @else if (message.type === 'assistant') {
+                <div class="bg-white rounded-4 px-4 py-2 shadow-sm border" style="max-width: 75%;">
+                  @if (message.loading) {
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="spinner-border spinner-border-sm text-primary" role="status"></span>
+                    <span class="text-muted">{{ message.content }}</span>
+                  </div>
+                  } @else {
+                  <div [innerHTML]="formatMessage(message.content)"></div>
+                  <small class="d-block mt-1 text-muted" style="font-size: 0.7rem;">
+                    {{ message.timestamp | date:'HH:mm' }}
+                  </small>
+                  }
+                </div>
+                } @else if (message.type === 'system') {
+                @if (message.content === 'CONFIRM_TICKET') {
+                <div class="w-100">
+                  <div class="bg-info bg-opacity-10 border border-info rounded p-3 mb-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="text-info">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      </svg>
+                      <strong class="text-info">Confirme a criação do ticket</strong>
+                    </div>
+                    @if (message.data) {
+                    <div class="mb-3 small">
+                      <div class="mb-2"><strong>Título:</strong> {{ message.data.titulo }}</div>
+                      <div class="mb-2"><strong>Descrição:</strong> {{ message.data.descricao }}</div>
+                      <div class="mb-2"><strong>Prioridade:</strong> 
+                        <span [class]="message.data.prioridade === 'Alta' ? 'badge bg-danger' : message.data.prioridade === 'Média' ? 'badge bg-warning' : 'badge bg-info'">
+                          {{ message.data.prioridade }}
+                        </span>
+                      </div>
+                      <div><strong>Categoria:</strong> 
+                        <span class="badge bg-secondary">{{ message.data.categoria }}</span>
+                      </div>
+                    </div>
+                    }
+                    <div class="d-flex gap-2">
+                      <button (click)="confirmTicketCreation(message.data)" class="btn btn-primary btn-sm flex-fill">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="me-1">
+                          <path d="M20 6 9 17l-5-5" />
+                        </svg>
+                        Criar Ticket
+                      </button>
+                      <button (click)="cancelTicketCreation()" class="btn btn-outline-secondary btn-sm flex-fill">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="me-1">
+                          <path d="M18 6 6 18" />
+                          <path d="M6 6l12 12" />
+                        </svg>
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                } @else {
+                <div class="w-100 text-center">
+                  <div class="bg-light rounded px-3 py-2 d-inline-block">
+                    <small class="text-muted">{{ message.content }}</small>
+                  </div>
+                </div>
+                }
+                }
+              </div>
+              }
+            </div>
+
+            <!-- Área de Input -->
+            <div class="card-footer bg-white border-top p-3">
+              @if (speechSupported()) {
+              <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                <div class="form-check form-switch mb-0 small">
+                  <input class="form-check-input" type="checkbox" id="modoAutoVoz" [checked]="modoAutomatico()" (change)="modoAutomatico.set($any($event.target).checked)">
+                  <label class="form-check-label text-muted" for="modoAutoVoz">Enviar ao pausar voz</label>
+                </div>
+                <button type="button" class="btn btn-sm ms-auto"
+                  [class.btn-danger]="gravandoAudio()"
+                  [class.btn-outline-secondary]="!gravandoAudio()"
+                  [disabled]="loading()"
+                  (click)="toggleGravacao()"
+                  [title]="gravandoAudio() ? 'Parar gravação' : 'Falar comando'">
+                  <i [class]="gravandoAudio() ? 'bi bi-mic-mute-fill' : 'bi bi-mic-fill'"></i>
+                  {{ gravandoAudio() ? ' Parar' : ' Falar' }}
+                </button>
+              </div>
+              }
+              <!-- Preview do arquivo selecionado -->
+              @if (selectedFile()) {
+              <div class="mb-2 p-2 bg-light rounded d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                  @if (filePreview()) {
+                  <img [src]="filePreview()" alt="Preview" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                  } @else {
+                  <i [class]="'bi ' + getFileIcon(selectedFile()!.name)" style="font-size: 24px; color: #06002E;"></i>
+                  }
+                  <div>
+                    <small class="d-block fw-semibold">{{ selectedFile()!.name }}</small>
+                    <small class="text-muted">{{ (selectedFile()!.size / 1024).toFixed(1) }} KB</small>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-link text-danger p-0" (click)="clearFile()" title="Remover anexo">
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </div>
+              }
+              
+              <div class="input-group">
+                <label for="fileInput" class="btn btn-outline-secondary border-0" style="cursor: pointer;" title="Anexar arquivo">
+                  <i class="bi bi-paperclip"></i>
+                </label>
+                <input 
+                  id="fileInput"
+                  type="file" 
+                  class="d-none" 
+                  accept="image/*,application/pdf"
+                  (change)="onFileSelected($event)"
+                  [disabled]="loading()">
+                <input #messageInput type="text" class="form-control border-0" placeholder="Descreva seu problema ou anexe um arquivo..."
+                  [value]="currentMessage()" (input)="currentMessage.set($any($event.target).value)"
+                  (keypress)="onKeyPress($event)" [disabled]="loading()">
+                <button class="btn btn-primary" type="button" (click)="sendMessage()" [disabled]="loading() || (!currentMessage().trim() && !selectedFile())">
+                  @if (loading()) {
+                  <span class="spinner-border spinner-border-sm" role="status"></span>
+                  } @else {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m22 2-7 20-4-9-9-4Z" />
+                    <path d="M22 2 11 13" />
+                  </svg>
+                  }
+                </button>
+              </div>
+              <small class="text-muted d-block mt-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                Powered by Gemini AI - Seus dados são processados de forma segura
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>

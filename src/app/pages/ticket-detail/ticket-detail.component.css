@@ -1,0 +1,55 @@
+/* Estilos específicos para a tela de detalhes do ticket */
+
+/* Badge de status "Em Progresso" - cor verde claro */
+.bg-info.text-white {
+  background-color: #20c997 !important;
+  color: white !important;
+}
+
+/* Badge de prioridade "Alta" - cor laranja */
+.bg-danger {
+  background-color: #fd7e14 !important;
+  color: white !important;
+}
+
+/* Input de comentário */
+.comentario-input {
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  background-color: var(--app-bg);
+}
+
+.comentario-input:focus {
+  border-color: #6f42c1;
+  box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
+  background-color: white;
+}
+
+/* Card de anexos */
+.anexo-item {
+  transition: background-color 0.2s;
+}
+
+.anexo-item:hover {
+  background-color: var(--app-bg);
+}
+
+/* Barra de ações */
+.barra-acoes {
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Histórico com melhor legibilidade */
+.historico-descricao {
+  line-height: 1.6;
+  color: #6c757d;
+}
+
+/* Todos os ícones do histórico são azuis */
+.bg-primary {
+  background-color: #06002E !important;
+}
+

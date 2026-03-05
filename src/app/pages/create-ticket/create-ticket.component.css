@@ -1,0 +1,124 @@
+/* Card principal */
+.create-ticket-card {
+  transition: box-shadow 0.2s ease;
+  border-radius: 0.75rem;
+}
+
+.create-ticket-card:hover {
+  box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Header do card */
+.create-ticket-header {
+  background: linear-gradient(135deg, #06002E 0%, #0d0044 100%) !important;
+  border: none !important;
+  color: #fff;
+}
+
+.create-ticket-header-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.create-ticket-title {
+  color: #fff !important;
+  font-size: 1.2rem;
+}
+
+.hover-opacity-100:hover {
+  opacity: 1 !important;
+}
+
+/* Seções do formulário */
+.create-ticket-section {
+  margin-bottom: 1.75rem;
+}
+
+.create-ticket-section:last-of-type {
+  margin-bottom: 0;
+}
+
+.create-ticket-section-title {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--app-text-muted, #6c757d);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--app-border, #eee);
+}
+
+.create-ticket-section-title i {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.create-ticket-section-body {
+  padding-left: 0;
+}
+
+/* Labels e inputs */
+.create-ticket-card .form-label {
+  font-weight: 500;
+  color: var(--app-text, #212529);
+  margin-bottom: 0.35rem;
+}
+
+.create-ticket-card .form-control:focus,
+.create-ticket-card .form-select:focus {
+  border-color: #06002E;
+  box-shadow: 0 0 0 0.2rem rgba(6, 0, 46, 0.15);
+}
+
+.create-ticket-card .form-text {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--app-text-muted, #6c757d);
+}
+
+/* Ações */
+.create-ticket-actions {
+  border-color: var(--app-border, #dee2e6) !important;
+}
+
+.create-ticket-actions .btn {
+  min-width: 140px;
+  font-weight: 500;
+}
+
+/* Responsividade */
+@media (max-width: 576px) {
+  .create-ticket-card .card-body {
+    padding: 1.25rem !important;
+  }
+
+  .create-ticket-header .d-flex.gap-3 {
+    gap: 0.75rem !important;
+  }
+
+  .create-ticket-header-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1.25rem;
+  }
+
+  .create-ticket-title {
+    font-size: 1.05rem !important;
+  }
+
+  .create-ticket-actions {
+    flex-direction: column-reverse;
+  }
+
+  .create-ticket-actions .btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
